@@ -79,6 +79,8 @@ app.get("/detail", async (req, res, next) => {
     let url = `https://library.lol/main/${md5}`;
     curl.get(url, function (err, response, body) {
       const $ = cheerio.load(response.body);
+      var info = $("#info h1", response.body);
+
       var a = $("#download a", response.body);
       if (a.length == 0) {
         res.json({
@@ -93,8 +95,10 @@ app.get("/detail", async (req, res, next) => {
       let thumbnail = $(img).attr("src");
       let desc = $(divs[divs.length - 1]).text();
       let downloadLink = $(a).attr("href");
+      let title = $(info).text();
       let data = {
-        thumbnail: "https://library.lol" + thumbnail || "",
+        title: title,
+        thumbnail: "http://library.lol" + thumbnail || "",
         download_link: downloadLink,
         desc: desc,
       };
